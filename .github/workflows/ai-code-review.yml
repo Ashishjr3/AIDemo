@@ -1,0 +1,48 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Get PR Diff
+      run: |
+        git fetch origin main
+        git diff origin/main...HEAD > pr.diff
+
+    - name: Send PR Diff to GPT for review
+      run: |
+        echo "Sending diff to GPT..."
+        curl https://api.openai.com/v1/chat/completions \
+          -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "model": "gpt-4",
+            "messages": [
+              {"role": "system", "content": "You are a senior code reviewer."},
+              {"role": "user", "content": "'"$(cat pr.diff | head -c 4000)"'"}
+            ],
+            "temperature": 0.3
+          }' > review.json
+
+        cat review.json | jq '.choices[0].message.content' > review.txt
+
+    - name: Comment on PR
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const review = fs.readFileSync('review.txt', 'utf8');
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: review
+          });
