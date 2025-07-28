@@ -35,23 +35,26 @@ jobs:
             exit 0
           fi
       
-          # Limit and escape diff safely
           DIFF=$(head -c 8000 pr.diff)
-          ENCODED_DIFF=$(printf '%s' "$DIFF" | jq -Rs .)   # Proper JSON string
+
+          # ✅ Build payload JSON safely using jq
+          PAYLOAD=$(jq -n --arg diff "$DIFF" '
+          {
+            model: "gpt-4o-mini",
+            messages: [
+              {role: "system", content: "You are a senior software engineer. Provide a structured, concise, and actionable PR code review."},
+              {role: "user", content: ("Review the following PR diff and provide feedback:\n\n" + $diff)}
+            ]
+          }')
       
-          echo "🚀 Sending PR diff to ChatGPT..."
+          echo "DEBUG Payload:"
+          echo "$PAYLOAD"
       
+          # ✅ Send to OpenAI API
           RAW_RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "{
-                  \"model\": \"gpt-4o-mini\",
-                  \"messages\": [
-                    {\"role\": \"system\", \"content\": \"You are a senior software engineer. Provide a structured, concise, and actionable PR code review.\"},
-                    {\"role\": \"user\", \"content\": \"Review the following PR diff and provide feedback:\n\n\" $ENCODED_DIFF }
-                  ]
-                }")
-      
+            -d "$PAYLOAD")
           echo "DEBUG RAW RESPONSE: $RAW_RESPONSE"
           echo "DEBUG RAW RESPONSE: $OPENAI_API_KEY"
           RESPONSE=$(echo "$RAW_RESPONSE" | jq -r '.choices[0].message.content // "⚠️ ChatGPT API did not return a valid response."')
