@@ -50,7 +50,7 @@ jobs:
                     {"role": "user", "content": "Review the following Git diff and suggest improvements. Be clear and provide examples where possible:\n\n'"$DIFF"'"}
                   ]
                 }' | jq -r '.choices[0].message.content // "⚠️ ChatGPT API did not return a valid response."')
-
+          echo "DEBUG RAW RESPONSE: $RESPONSE"
           # Save response to output
           echo "response<<EOF" >> $GITHUB_OUTPUT
           echo "$RESPONSE" >> $GITHUB_OUTPUT
