@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "i6U8urtIAyU=",
+  "success": true,
+  "projectFilePath": "/Users/ashishjr3gmail.com/Documents/AI_GitHub/AIDemo/StudentGen_AI/StudentGen_AI.csproj",
+  "expectedPackageFiles": [
+    "/Users/ashishjr3gmail.com/.nuget/packages/microsoft.aspnetcore.openapi/9.0.7/microsoft.aspnetcore.openapi.9.0.7.nupkg.sha512",
+    "/Users/ashishjr3gmail.com/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
