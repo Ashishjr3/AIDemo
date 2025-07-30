@@ -18,7 +18,8 @@ var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
-
+// Added comment to explain the purpose of this endpoint
+// This endpoint returns a weather forecast for the next 5 days with random temperatures and summaries.
 app.MapGet("/weatherforecast", () =>
 {
     var forecast =  Enumerable.Range(1, 5).Select(index =>

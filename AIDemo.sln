@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentGen_AI", "StudentGen_AI\StudentGen_AI.csproj", "{4C774671-9544-41D5-F769-D08EA544DE84}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C774671-9544-41D5-F769-D08EA544DE84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C774671-9544-41D5-F769-D08EA544DE84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C774671-9544-41D5-F769-D08EA544DE84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C774671-9544-41D5-F769-D08EA544DE84}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F397868-A3C4-4FCD-AA17-82AC8FD4C14E}
+	EndGlobalSection
+EndGlobal
