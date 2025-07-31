@@ -27,7 +27,7 @@ public class ApiController : ControllerBase
             return BadRequest("Prompt cannot be empty.");
         var requestBody = new
         {
-            model = "gpt-3.5-turbo",
+            model = "gpt-4o-mini",
             messages = new[]
             {
                 new { role = "user", content = prompt }
