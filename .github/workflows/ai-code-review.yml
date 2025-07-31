@@ -21,7 +21,7 @@ jobs:
         run: |
           git fetch origin main
           git diff origin/main...HEAD > pr.diff
-          echo "✅ PR diff generated successfully."
+          echo "PR diff generated successfully."
 
       - name: Send Diff to ChatGPT
         id: chatgpt
@@ -30,14 +30,14 @@ jobs:
         run: |
           if [ ! -s pr.diff ]; then
             echo "response<<EOF" >> $GITHUB_OUTPUT
-            echo "⚠️ No changes detected in the PR diff." >> $GITHUB_OUTPUT
+            echo "No changes detected in the PR diff." >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
             exit 0
           fi
       
           DIFF=$(head -c 8000 pr.diff)
 
-          # ✅ Build payload JSON safely using jq
+          #Build payload JSON safely using jq
           PAYLOAD=$(jq -n --arg diff "$DIFF" '
           {
             model: "gpt-4o-mini",
@@ -50,7 +50,7 @@ jobs:
           echo "DEBUG Payload:"
           echo "$PAYLOAD"
       
-          # ✅ Send to OpenAI API
+          # Send to OpenAI API
           RAW_RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
@@ -62,7 +62,7 @@ jobs:
           echo "response<<EOF" >> $GITHUB_OUTPUT
           echo "$RESPONSE" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-          echo "✅ ChatGPT review captured successfully."
+          echo "ChatGPT review captured successfully."
       
 
 
@@ -73,6 +73,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_Token }}
           header: ai-code-review
           message: |
-            🤖 **ChatGPT Code Review**  
+            **ChatGPT Code Review**  
             ---
             ${{ steps.chatgpt.outputs.response }}
