@@ -1,34 +1,51 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
 trigger:
-- main
+  branches:
+    include:
+      - main   # adjust if using another branch
 
 pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
-- task: NuGetToolInstaller@1
+# Step 1: Use .NET SDK
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'   # change to your .NET version
 
+# Step 2: Restore NuGet Packages
 - task: NuGetCommand@2
   inputs:
-    restoreSolution: '$(solution)'
+    restoreSolution: 'APIDemo/StudentGen_AI.sln'
 
+# Step 3: Build Solution
 - task: VSBuild@1
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
+    solution: 'APIDemo/StudentGen_AI.sln'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
+# Step 4: Publish Web Project
+- task: DotNetCoreCLI@2
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'publish'
+    projects: 'APIDemo/StudentGen_AI.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+
+# Step 5: Publish Build Artifacts
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+# Step 6: Deploy to Azure Web App
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '6c318e60-5d41-47fe-995f-6adebe404d4d'
+    appType: 'webApp'
+    appName: 'genAI-api-glb-in'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
