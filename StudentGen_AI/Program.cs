@@ -13,9 +13,9 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();        // Add this line
-    app.UseSwaggerUI();      // Add this line
+    //app.UseSwaggerUI();      // Add this line
 }
-
+app.UseSwaggerUI();  
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Use(async (context, next) =>
