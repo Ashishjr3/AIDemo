@@ -10,11 +10,8 @@ builder.Services.AddSwaggerGen();           // Add this line
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();        // Add this line
-    //app.UseSwaggerUI();      // Add this line
-}
+
+app.UseSwagger(); 
 app.UseSwaggerUI();  
 app.UseHttpsRedirection();
 app.MapControllers();
