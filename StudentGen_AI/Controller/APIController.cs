@@ -9,9 +9,9 @@ using System.Text;
 public class ApiController : ControllerBase
 {
     private readonly HttpClient _httpClient;
-    private readonly string _openAiApiKey;
-    private readonly string _openAiApiUrl;
-    private readonly string _giminiApiKey;
+    private readonly string? _openAiApiKey;
+    private readonly string? _openAiApiUrl;
+    private readonly string? _giminiApiKey;
 
     public ApiController(IConfiguration configuration)
     {

@@ -2,7 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+//builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer(); // Add this line
 builder.Services.AddSwaggerGen();           // Add this line
@@ -18,7 +18,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.Use(async (context, next) =>
+{
 
+    if (context.Request.Method == "/")
+    {
+        context.Response.Redirect("/swagger/index.html");
+        return;
+    }
+    await next();
+});
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
